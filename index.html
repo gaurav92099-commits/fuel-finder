@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fuel Finder — COCO &amp; Premium Fuel Outlets</title>
+<meta name="description" content="Find verified COCO and premium (XP95/XP100) fuel pumps near you, cross-checked against official sources." />
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="main-layout">
+  <div id="map"></div>
+
+  <div class="top-overlay">
+    <div class="brand-row">
+      <div class="brand-title">Skip the wrong pump.</div>
+    </div>
+    <div class="brand-sub">Find COCO-operated outlets and pumps confirmed to actually stock premium fuel — XP95, XP100, V-Power — cross-checked against official sources, not guesswork.</div>
+
+    <div class="mode-tabs" id="modeTabs">
+      <button class="mode-tab active" data-mode="nearby">Nearby</button>
+      <button class="mode-tab" data-mode="trip">Plan a trip</button>
+    </div>
+
+    <div class="search-bar" id="nearbyControls">
+      <select id="citySelect">
+        <option value="">Search a city…</option>
+        <option value="Pune">Pune (100km radius)</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Navi Mumbai">Navi Mumbai</option>
+        <option value="Thane">Thane</option>
+        <option value="Nashik">Nashik</option>
+        <option value="Nagpur">Nagpur</option>
+        <option value="Gurugram">Gurugram</option>
+        <option value="Faridabad">Faridabad</option>
+      </select>
+      <button id="locateBtn" class="locate-btn">📍 Use my location</button>
+    </div>
+
+    <div class="trip-controls" id="tripControls" style="display:none">
+      <input id="tripStart" class="trip-input" placeholder="Start (blank = your current location)" />
+      <input id="tripEnd" class="trip-input" placeholder="Destination" />
+      <div class="trip-btn-row">
+        <button id="tripFindBtn" class="locate-btn">🧭 Find pumps on route</button>
+        <button id="tripShareBtn" class="share-btn" style="display:none">📍 Share trip via Google Maps</button>
+      </div>
+    </div>
+
+    <div class="segmented" id="filterSegmented">
+      <button class="seg-btn active" data-mode="all">All outlets</button>
+      <button class="seg-btn" data-mode="coco">COCO only</button>
+      <button class="seg-btn" data-mode="premium">Premium / XP only</button>
+    </div>
+
+    <label class="show-normal-toggle">
+      <input type="checkbox" id="showNormalToggle" />
+      <span>Show other nearby pumps (not COCO/premium-verified)</span>
+    </label>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <div id="listPanel" class="list-panel">
+    <div class="panel-handle" id="panelHandle">
+      <div class="bar"></div>
+    </div>
+    <div id="outletList"></div>
+    <div class="legend-footer">
+      Confidence: <span class="dot-inline" style="background:#1fa971"></span> official brand source &nbsp;·&nbsp;
+      <span class="dot-inline" style="background:#e0a52c"></span> review-confirmed only.
+      No OMC locator filters by ownership type or premium-fuel stock — every entry here was checked by hand.
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
