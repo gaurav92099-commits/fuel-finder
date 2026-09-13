@@ -18,6 +18,7 @@ const CITY_CENTERS = {
   Nagpur: [21.1458, 79.0882],
   Gurugram: [28.4595, 77.0266],
   Faridabad: [28.4089, 77.3178],
+  'Chhatrapati Sambhajinagar': [19.8762, 75.3433],
 };
 
 let map = L.map('map', { zoomControl: false }).setView(CITY_CENTERS.Pune, 12);
