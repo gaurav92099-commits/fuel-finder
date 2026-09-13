@@ -22,9 +22,9 @@ const CITY_CENTERS = {
 
 let map = L.map('map', { zoomControl: false }).setView(CITY_CENTERS.Pune, 12);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-  maxZoom: 19,
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+  maxZoom: 16,
 }).addTo(map);
 
 let markersLayer = L.markerClusterGroup({
@@ -101,7 +101,7 @@ async function fetchAllOutlets() {
   if (error) {
     setStatus('Could not load data — check Supabase config in config.js');
     console.error(error);
-    return [];
+    return null;
   }
   return data;
 }
@@ -112,6 +112,7 @@ async function fetchOutlets(city) {
   if (city && RADIUS_CITIES[city]) {
     const { center, km } = RADIUS_CITIES[city];
     const all = await fetchAllOutlets();
+    if (all === null) return []; // fetchAllOutlets already set the error status — don't overwrite it
     const within = all.filter(o => distanceKm(center[0], center[1], o.lat, o.lng) <= km);
     setStatus(`${within.length} outlet(s) within ${km}km of ${city}`);
     return within;
@@ -595,6 +596,10 @@ tripFindBtn.addEventListener('click', async () => {
     // the full dataset, not whatever city-scoped subset happens to be loaded already
     setStatus('Checking pumps along the route…');
     const allForTrip = await fetchAllOutlets();
+    if (allForTrip === null) {
+      tripFindBtn.disabled = false;
+      return; // fetchAllOutlets already set the error status
+    }
     const candidates = applyFilters(allForTrip);
     tripPumps = candidates
       .map(o => ({ ...o, _routeDist: minDistanceToRoute(o.lat, o.lng, route.latlngs) }))
